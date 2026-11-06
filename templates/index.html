@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MovieSent</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: rgba(30, 30, 30, 0.9);
+            --text-color: #f0f0f0;
+            --placeholder-color: #666;
+            --primary-color: #FFD700;
+            --positive-color: #00FF00;
+            --negative-color: #FF4500;
+            --border-color: #333;
+            --transition-speed: 0.4s;
+            --glow-filter: drop-shadow(0 0 5px var(--primary-color)) drop-shadow(0 0 10px var(--primary-color));
+        }
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bg-color);
+            background-image: url('https://static.vecteezy.com/system/resources/thumbnails/026/853/218/small_2x/cinema-interior-with-big-screen-created-with-generative-ai-photo.jpg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 50px 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+        }
+        .subtitle {
+            font-size: 1em;
+            color: #ccc;
+            margin-bottom: 40px;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            background-color: #2b2b2b;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1.05em;
+            margin-bottom: 25px;
+            resize: vertical;
+            min-height: 150px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+        textarea::placeholder {
+            color: var(--placeholder-color);
+        }
+        textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+            outline: none;
+        }
+        button {
+            background-color: var(--primary-color);
+            color: var(--card-bg);
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform 0.2s, opacity var(--transition-speed);
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        button:hover {
+            background-color: #ffc700;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none;
+            box-shadow: none;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--text-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #result {
+            margin-top: 35px;
+            font-weight: 700;
+            font-size: 1.4em;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #2b2b2b;
+            border: 1px dashed var(--border-color);
+            color: #999;
+            transition: color var(--transition-speed), background-color var(--transition-speed), border-color var(--transition-speed);
+        }
+        #result.positive {
+            color: var(--positive-color);
+            background-color: #0d280d;
+            border-color: var(--positive-color);
+            box-shadow: 0 0 10px var(--positive-color);
+            animation: glow-positive 1s ease-in-out infinite alternate;
+        }
+        #result.negative {
+            color: var(--negative-color);
+            background-color: #280d0d;
+            border-color: var(--negative-color);
+            box-shadow: 0 0 10px var(--negative-color);
+            animation: glow-negative 1s ease-in-out infinite alternate;
+        }
+        @keyframes glow-positive {
+            from { box-shadow: 0 0 5px var(--positive-color), 0 0 10px var(--positive-color); }
+            to { box-shadow: 0 0 10px var(--positive-color), 0 0 15px var(--positive-color); }
+        }
+        @keyframes glow-negative {
+            from { box-shadow: 0 0 5px var(--negative-color), 0 0 10px var(--negative-color); }
+            to { box-shadow: 0 0 10px var(--negative-color), 0 0 15px var(--negative-color); }
+        }
+        .icon {
+            margin-right: 12px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MovieSent</h1>
+        <div class="subtitle">An AI-powered sentiment analyzer for movie reviews.</div>
+        <textarea id="review-text" placeholder="Tell me what you think about a movie..."></textarea>
+        <button id="predict-btn" onclick="predictSentiment()">Predict Sentiment</button>
+        <div id="result">
+            <span class="icon"><i class="fas fa-video"></i></span>
+            <span>Awaiting your review...</span>
+        </div>
+    </div>
+
+    <script>
+        function predictSentiment() {
+            var review = $("#review-text").val();
+            if (review.trim() === "") {
+                updateResult("Please enter a review to analyze.", "negative", '<i class="fas fa-exclamation-triangle"></i>');
+                return;
+            }
+
+            // Disable button and show spinner
+            const predictBtn = $("#predict-btn");
+            predictBtn.prop('disabled', true).html('<span class="spinner"></span> Analyzing...');
+            updateResult("Analyzing...", ""); // Set state to analyzing
+
+            $.ajax({
+                url: "/predict",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ review: review }),
+                success: function(response) {
+                    var sentiment = response.sentiment;
+                    var iconHtml = sentiment === "Positive" ? '<i class="far fa-smile-beam"></i>' : '<i class="far fa-frown-open"></i>';
+                    updateResult(`Predicted Sentiment: ${sentiment}`, sentiment.toLowerCase(), iconHtml);
+                },
+                error: function() {
+                    updateResult("Error: Could not get a prediction.", "negative", '<i class="fas fa-exclamation-triangle"></i>');
+                },
+                complete: function() {
+                    // Re-enable button
+                    predictBtn.prop('disabled', false).html('Predict Sentiment');
+                }
+            });
+        }
+
+        function updateResult(text, sentimentClass, iconHtml = '') {
+            $("#result").html(`<span class="icon">${iconHtml}</span><span>${text}</span>`).removeClass("positive negative").addClass(sentimentClass);
+        }
+    </script>
+</body>
+</html>
